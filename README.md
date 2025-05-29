@@ -1,6 +1,10 @@
 # postgrad-ai
 My postgraduation repository
 
-## Notebook URL:
+### Miscs
 
-https://drive.google.com/drive/folders/1zFloCkhxuaAV6535DxiEBm_qjOZ6H87t
+List of links:
+
+- [Pandas Docs](https://pandas.pydata.org/docs/getting_started/intro_tutorials/index.html)
+- [Python Pandas Tutorial](https://www.datacamp.com/tutorial/pandas)
+- [W3Schools Pandas](https://www.w3schools.com/python/pandas/default.asp)
