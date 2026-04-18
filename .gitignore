@@ -2,5 +2,5 @@ venv
 .venv
 .vscode
 .idea
-
+skip_50d.txt
 fase_3/machine_learning/auto_ml/AutogluonModels
