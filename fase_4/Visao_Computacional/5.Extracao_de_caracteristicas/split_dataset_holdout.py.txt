@@ -1,0 +1,72 @@
+import os
+import random
+import shutil
+
+def split_dataset(input_dataset_path, output_dataset_path, split_ratio=0.8, seed=42):
+    # Verificar se o caminho de saída existe, se não, criar
+    if not os.path.exists(output_dataset_path):
+        os.makedirs(output_dataset_path)
+    
+    # Listar todas as classes (pastas) no dataset de entrada
+    classes = sorted(os.listdir(input_dataset_path))
+    
+    # Para cada classe, criar subpastas 'train' e 'test' e distribuir os arquivos
+    for class_name in classes:
+        class_path = os.path.join(input_dataset_path, class_name)
+        if os.path.isdir(class_path):
+            # Listar os arquivos nesta classe
+            files = os.listdir(class_path)
+            
+            # Definir tamanho dos conjuntos de treino e teste
+            num_files = len(files)
+            split_index = int(split_ratio * num_files)
+            
+            # Embaralhar os arquivos com base na semente
+            random.seed(seed)
+            random.shuffle(files)
+            
+            # Criar pastas 'train' e 'test' dentro da pasta de saída
+            train_path = os.path.join(output_dataset_path, 'train', class_name)
+            test_path = os.path.join(output_dataset_path, 'test', class_name)
+            
+            # Criar pastas se não existirem
+            os.makedirs(train_path, exist_ok=True)
+            os.makedirs(test_path, exist_ok=True)
+            
+            # Copiar arquivos para as pastas de treino e teste
+            for i, file in enumerate(files):
+                src = os.path.join(class_path, file)
+                if i < split_index:
+                    dst = os.path.join(train_path, file)
+                else:
+                    dst = os.path.join(test_path, file)
+                shutil.copy(src, dst)
+                
+            print(f"Classe '{class_name}': {split_index} imagens para treino, {num_files - split_index} imagens para teste.")
+
+
+input_dataset_path = 'datasets/covid19/'
+#dentro da pasta de entrada deve conter apenas subpastas com as categorias 
+#ou classes de imagens. Exemplo:
+#  |_datasets
+#    |_covid19
+#       |_covid 
+#       |_normal
+output_dataset_path = 'datasets/covid19_holdout/'
+# o resulta sera algo como:
+#  |_datasets
+#    |_covid19
+#       |_train
+#           |_covid 
+#           |_normal
+#       |_test
+#           |_covid 
+#           |_normal
+
+split_ratio = 0.8  # Proporção de divisão (80% para treino, 20% para teste)
+seed = 42  # Semente para reprodutibilidade dos resultados
+
+split_dataset(input_dataset_path, output_dataset_path, split_ratio, seed)
+
+
+print("Dataset dividido usando holdout com sucesso!")
