@@ -1,2 +1,0 @@
-Estes arquivos correspondem a uma evolução do projeto anterior de extração de características disponível no moodle.
-Basta substituir o arquivo .ipynb antigo por este novo arquivo e incluir o arquivo cnn.py dentro da pasta modulos=>descritores
