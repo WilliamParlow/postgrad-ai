@@ -1,6 +1,8 @@
 import os
 import torch
 import subprocess
+import urllib.request
+import urllib.error
 
 
 def verificar_gpu():
@@ -40,22 +42,19 @@ def baixar_modelo_yolov9_treinado(caminho_origem, caminho_destino):
     nome_modelo = caminho_origem.split('/')[-1]
     # Constrói o caminho completo do arquivo de destino
     caminho_modelo_destino = os.path.join(caminho_destino, nome_modelo)
-    # Verifica se o diretório existe e se está vazio
+    # Verifica se o arquivo já existe
     if not os.path.exists(caminho_modelo_destino):
-        # Comando para executar baixar o modelo
-        command = ['wget', '-P', caminho_destino, caminho_origem]
+        # Cria o diretório se não existir
+        os.makedirs(caminho_destino, exist_ok=True)
         try:
-            # Para executar o comando git diretamente de um script Python 
-            # fora de um notebook, pode usar o módulo subprocess para chamar 
-            # comandos do sistema
-            result = subprocess.run(command, check=True, text=True, capture_output=True)
-            # Exibe a saída do comando
-            print(result.stdout)
+            # Usa urllib para fazer download (funciona em Windows, Linux e Mac)
+            print(f"Baixando {nome_modelo}...")
+            urllib.request.urlretrieve(caminho_origem, caminho_modelo_destino)
             print(f"Modelo pré-treinado {nome_modelo} foi salvo em {caminho_destino}")
-        except subprocess.CalledProcessError as e:
-            # Captura o erro se o comando retornar um código de erro
-            print(f"Erro ao executar o comando: {e}")
-            print(f"Saída do erro: {e.stderr}")
+        except urllib.error.URLError as e:
+            print(f"Erro ao baixar o modelo: {e}")
+        except Exception as e:
+            print(f"Erro inesperado: {e}")
     else:
         print(f"O modelo pré-treinado {nome_modelo} já existe em {caminho_destino}.")
 
